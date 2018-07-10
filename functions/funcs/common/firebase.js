@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 
 let serviceAccount;
 if (process.env.NODE_ENV === 'test') {
-  serviceAccount = require('./keys/unicon-test-firebase-adminsdk.json');
+  serviceAccount = require('./keys/unicon-test-runtime-key.json');
 } else {
   serviceAccount = functions.config().unicon.cert;
 }
