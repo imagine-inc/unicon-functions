@@ -1,26 +1,20 @@
 const firebase = require('./common/firebase');
+const uid = require('uid-safe')
+const random = require('random-name')
 
 module.exports = firebase.functions.https.onRequest((req, res) => {
-  return firebase.admin.auth().createUser()
-  .then((userRecord) => {
-    // See the UserRecord reference doc for the contents of userRecord.
-    console.log("Successfully created new user:", userRecord.uid);
-    return res.send('done!');
-  })
-  .catch((error) => {
-    console.log("Error creating new user:", error);
-    return res.send('error!');
-  });
-});
-
- // age: "user@example.com",
- // area: false,
-//elonging: "+11234567890",
- // facebookID: "secretPassword",
- // firstName: "John Doe",
- // gender: "http://www.example.com/12345678/photo.png",
- // intro: "http://www.example.com/12345678/photo.png",
- // userImage: "http://www.example.com/12345678/photo.png",
- // useUID: "http://www.example.com/12345678/photo.png",
- // gender: "http://www.example.com/12345678/photo.png",
- // gender: "http://www.example.com/12345678/photo.png",
+  const additionalNum = req.body.addition;
+  const batch = firebase.db.batch();
+  for (i = 0; i < additionalNum; i++) {
+    const userRef = firebase.db.collection("users").doc(uid.sync(21));
+    batch.set(userRef, {name: random()});
+  } 
+  return batch.commit()
+    .then(() =>  {
+      return res.send('Random users were successfully created!')
+    })
+    .catch((err) => {
+      console.error("Error creating new user:", err);
+      return res.send('error!');
+    });
+})

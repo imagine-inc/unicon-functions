@@ -9,6 +9,7 @@ describe('/CreateRandomUsers', () => {
     it('should insert random users to db', (done) => {
       const req = httpMocks.createRequest({
         method: 'POST',
+        body: { addition: 10 },
       });
       const res = httpMocks.createResponse({
         eventEmitter: events.EventEmitter
